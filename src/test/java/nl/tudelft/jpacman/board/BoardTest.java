@@ -3,6 +3,9 @@ package nl.tudelft.jpacman.board;
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
+/**
+ * Tests for {@link Board}.
+ */
 public class BoardTest {
     /**
      * A valid 1×1 board returns the same square at (0,0).
