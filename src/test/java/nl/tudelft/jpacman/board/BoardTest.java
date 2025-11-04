@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Tests for {@link Board}.
+ * Tests to confirm {@link Board}.
  */
 public class BoardTest {
     /**
