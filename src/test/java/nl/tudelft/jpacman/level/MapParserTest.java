@@ -8,6 +8,9 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
+import nl.tudelft.jpacman.PacmanConfigurationException;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,7 +61,6 @@ public class MapParserTest {
         final int totalGround = spaces + players + ghosts + pellets;
         Mockito.verify(boardFactory, Mockito.times(totalGround))
             .createGround();
-
     }
 
     /**
@@ -79,5 +81,31 @@ public class MapParserTest {
         }
         return n;
     }
+
+    /**
+     * Test for the parseMap method (bad map).
+     */
+    @Test
+    public void testParseMapWrong1() {
+        PacmanConfigurationException thrown =
+            assertThrows(PacmanConfigurationException.class, () -> {
+                MockitoAnnotations.initMocks(this);
+                assertNotNull(boardFactory);
+                assertNotNull(levelFactory);
+
+                MapParser mapParser = new MapParser(levelFactory, boardFactory);
+                ArrayList<String> map = new ArrayList<>();
+
+                map.add("####");
+                map.add("###");
+
+                mapParser.parseMap(map);
+            });
+
+        assertEquals("Input text lines are not of equal width.", thrown.getMessage());
+
+        Mockito.verifyZeroInteractions(levelFactory, boardFactory);
+    }
+
 
 }
