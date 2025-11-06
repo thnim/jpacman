@@ -10,6 +10,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -43,19 +44,40 @@ public class MapParserTest {
 
         mapParser.parseMap(map);
 
-        int walls   = 26;
-        int spaces  = 8;
-        int players = 1;
-        int ghosts  = 1;
-        int pellets = 0;
+        final int walls   = countChar(map, '#');
+        final int spaces  = countChar(map, ' ');
+        final int players = countChar(map, 'P');
+        final int ghosts  = countChar(map, 'G');
+        final int pellets = countChar(map, '.');
 
 
         Mockito.verify(levelFactory, Mockito.times(1)).createGhost();
         Mockito.verify(levelFactory, Mockito.times(ghosts)).createGhost();
         Mockito.verify(levelFactory, Mockito.times(pellets)).createPellet();
         Mockito.verify(boardFactory, Mockito.times(walls)).createWall();
-        Mockito.verify(boardFactory, Mockito.times(spaces + players + ghosts + pellets)).createGround();
+        final int totalGround = spaces + players + ghosts + pellets;
+        Mockito.verify(boardFactory, Mockito.times(totalGround))
+            .createGround();
 
+    }
+
+    /**
+     * Counts occurrences of a character across all lines of the map.
+     *
+     * @param lines Map lines.
+     * @param ch    Character to count.
+     * @return Number of occurrences.
+     */
+    private static int countChar(List<String> lines, char ch) {
+        int n = 0;
+        for (String s : lines) {
+            for (int i = 0; i < s.length(); i++) {
+                if (s.charAt(i) == ch) {
+                    n++;
+                }
+            }
+        }
+        return n;
     }
 
 }
